@@ -9,6 +9,11 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    const TEACHER = 'teacher';
+
+    const ADMINISTRATOR = 'admin';
+
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *

@@ -34,25 +34,8 @@
                     </ul>
                 </li>
                 <li class="active has-sub">
-                    <a class="js-arrow" href="#">
-                        <i class="fas fa-table"></i>Журнал</a>
-                    <ul class="list-unstyled navbar__sub-list js-sub-list">
-                        <li>
-                            <a href="{{ route('admin.dashboard') }}">Панель керування</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('groups.index') }}">Групи</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('subjects.index') }}">Заняття</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('teachers.index') }}">Викладачі</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('students.index') }}">Студенти</a>
-                        </li>
-                    </ul>
+                    <a class="js-arrow" href="{{ route('teacher.index') }}">
+                        <i class="fas fa-table"></i>Пари</a>
                 </li>
             </ul>
         </nav>

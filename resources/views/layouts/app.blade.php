@@ -84,6 +84,5 @@
 <script src="{{ asset('js/main.js') }}"></script>
 <!-- App JS -->
 @yield('scripts')
-{{--<script src="{{ asset('js/app.js') }}"></script>--}}
 </body>
 </html>

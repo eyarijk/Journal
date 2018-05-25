@@ -22,9 +22,11 @@ Auth::routes();
  * Teacher Routes
  */
 
-Route::get('/dashboard','Teacher\DashboardController@index');
-
-
+Route::get('/dashboard','Teacher\DashboardController@index')->name('teacher.index');
+Route::get('/couple/{couple}','Teacher\JournalsController@couple')->name('teacher.couple');
+Route::get('/journal/{mouth}/{year}/couple/{couple}','Teacher\JournalsController@show')->name('journal.show');
+Route::get('/journal/create/{couple}','Teacher\JournalsController@create')->name('journal.create');
+Route::post('/journal/store/{couple}','Teacher\JournalsController@store')->name('journal.store');
 /*
  * Admin Routes
  */

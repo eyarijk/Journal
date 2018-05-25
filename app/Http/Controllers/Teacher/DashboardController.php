@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers\Teacher;
 
+use App\TeacherGroup;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+
 
 class DashboardController extends Controller
 {
+
     public function index()
     {
-        return view('teacher.index');
+        $teacher = 1;
+        $couples = TeacherGroup::where('user_id',$teacher)->get();
+
+        return view('teacher.index',compact('couples'));
     }
 }

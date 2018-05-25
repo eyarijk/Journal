@@ -3,7 +3,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <h3 class="title-5 m-b-35">Групи</h3>
+            <h3 class="title-5 m-b-35">Пари</h3>
             <div class="table-data__tool">
                 <div class="table-data__tool-right">
                     <a style="color:#fff;" href="{{ route('couples.create') }}" class="au-btn au-btn-icon au-btn--green au-btn--small">

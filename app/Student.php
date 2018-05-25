@@ -19,5 +19,9 @@ class Student extends Model
         return $this->belongsTo('App\Group');
     }
 
+    public function getFullName()
+    {
 
+        return $this->last_name . ' ' . $this->first_name;
+    }
 }

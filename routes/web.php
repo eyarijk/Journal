@@ -51,4 +51,9 @@ Route::prefix('admin')->group(function () {
     Route::get('students/create', 'Admin\StudentsController@create')->name('students.create');
     Route::post('students/store', 'Admin\StudentsController@store')->name('students.store');
     Route::delete('students/delete/{subject}', 'Admin\StudentsController@delete')->name('students.delete');
+    //Couples
+    Route::get('couples', 'Admin\CoupleController@index')->name('couples.index');
+    Route::get('couples/create', 'Admin\CoupleController@create')->name('couples.create');
+    Route::post('couples/store', 'Admin\CoupleController@store')->name('couples.store');
+    Route::delete('couples/delete/{couple}', 'Admin\CoupleController@delete')->name('couples.delete');
 });

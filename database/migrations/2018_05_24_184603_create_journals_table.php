@@ -15,8 +15,7 @@ class CreateJournalsTable extends Migration
     {
         Schema::create('journals', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('teacher_id')->unsigned();
-            $table->integer('subject_id')->unsigned();
+            $table->integer('teacher_group_id')->unsigned();
             $table->integer('student_id')->unsigned();
             $table->string('day_1')->nullable();
             $table->string('day_2')->nullable();

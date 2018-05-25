@@ -6,30 +6,30 @@
             <h3 class="title-5 m-b-35">Групи</h3>
             <div class="table-data__tool">
                 <div class="table-data__tool-right">
-                    <a style="color:#fff;" href="{{ route('groups.create') }}" class="au-btn au-btn-icon au-btn--green au-btn--small">
-                        <i class="zmdi zmdi-plus"></i>Додати групу</a>
+                    <a style="color:#fff;" href="{{ route('couples.create') }}" class="au-btn au-btn-icon au-btn--green au-btn--small">
+                        <i class="zmdi zmdi-plus"></i>Додати пару</a>
                 </div>
             </div>
             <div class="table-responsive table-responsive-data2">
-                @if (sizeof($groups) > 0)
+                @if (sizeof($couples) > 0)
                     <table class="table table-data2">
                         <thead>
                         <tr>
-                            <th>Назва</th>
-                            <th>Кількість студентів</th>
-                            <th>Факультет</th>
+                            <th>Викладач</th>
+                            <th>Предмет</th>
+                            <th>Група</th>
                             <th></th>
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($groups as $group)
+                        @foreach($couples as $couple)
                             <tr class="tr-shadow">
-                                <td>{{ $group->name }}</td>
-                                <td>{{ $group->student->count() }} студентів</td>
-                                <td>{{ $group->faculty->name }}</td>
+                                <td>{{ $couple->teacher->getFullName() }}</td>
+                                <td>{{ $couple->subject->name }}</td>
+                                <td>{{ $couple->group->name }}</td>
                                 <td>
                                     <div class="table-data-feature">
-                                        <form method="post" action="{{ route('groups.delete',$group->id) }}">
+                                        <form method="post" action="{{ route('couples.delete',$couple->id) }}">
                                             {{ method_field('delete') }}
                                             {{ csrf_field()}}
                                             <button type="submit" class="item" data-toggle="tooltip" data-placement="top" title="Видалити">

@@ -8,9 +8,9 @@ class Journal extends Model
 {
     public $timestamps = false;
 
-    public function teacher()
+    public function teacherGroup()
     {
-        return $this->belongsTo('App\Teacher');
+        return $this->belongsTo('App\TeacherGroup');
     }
 
     public function student()
@@ -18,8 +18,4 @@ class Journal extends Model
         return $this->belongsTo('App\Student');
     }
 
-    public function subject()
-    {
-        return $this->belongsTo('App\Subject');
-    }
 }

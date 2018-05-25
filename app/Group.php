@@ -12,4 +12,9 @@ class Group extends Model
     {
         return $this->hasMany('App\Student');
     }
+
+    public function faculty()
+    {
+        return $this->belongsTo('App\Faculty');
+    }
 }

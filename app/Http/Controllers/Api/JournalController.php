@@ -102,4 +102,15 @@ class JournalController extends Controller
         }
         return $students;
     }
+
+    public function storeDay(Request $request)
+    {
+        $year   = $request->year;
+        $month  = $request->month;
+        $couple = $request->couple;
+
+        Journal::where('teacher_group_id',$couple)->where('year',$year)->where('month',$month)->update(['day_'. $request->day => ' ']);
+
+        return 'Success';
+    }
 }

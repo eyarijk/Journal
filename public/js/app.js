@@ -13314,6 +13314,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['couple', 'year', 'month'],
@@ -13348,14 +13351,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             for (var i = 0; i < this.students.length; i++) {
                 this.students[i].days.push({
                     day: this.newTh,
-                    number: null
+                    number: ' '
                 });
             }
+
+            this.$http.post('/api/journal/store/day?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple, { day: this.newTh }).then(function (response) {}, function (error) {
+                console.log(error);
+            });
+
             this.th.push({ name: this.newTh });
             this.newTh = null;
-        },
-        formatNameForInput: function formatNameForInput(student, day) {
-            return 'student:' + student + ';day:' + day;
         },
         saveNumber: function saveNumber(number, student, day) {
             this.$http.post('/api/journal/save/?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple, { number: number, day: day, student: student }).then(function (response) {}, function (error) {
@@ -13373,130 +13378,134 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "table-responsive m-b-40" }, [
-    _c("table", { staticClass: "table table-borderless table-data3" }, [
-      _c("thead", [
-        _c(
-          "tr",
-          [
-            _vm._l(_vm.th, function(item) {
-              return _c("th", [_vm._v(_vm._s(item.name))])
-            }),
-            _vm._v(" "),
-            _c("th", [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.newTh,
-                    expression: "newTh"
-                  }
-                ],
-                staticStyle: { width: "50px", "padding-left": "20px" },
-                attrs: { placeholder: "+" },
-                domProps: { value: _vm.newTh },
-                on: {
-                  keyup: function($event) {
-                    if (
-                      !("button" in $event) &&
-                      _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
-                    ) {
-                      return null
-                    }
-                    _vm.addTh()
-                  },
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.newTh = $event.target.value
-                  }
-                }
-              })
-            ])
-          ],
-          2
-        )
-      ]),
-      _vm._v(" "),
-      _c(
-        "tbody",
-        _vm._l(_vm.students, function(student) {
-          return _c(
+  return _c("div", [
+    _c("h3", { staticClass: "title-5 m-b-35" }, [_vm._v("Hello")]),
+    _vm._v(" "),
+    _c("div", { staticClass: "table-responsive m-b-40" }, [
+      _c("table", { staticClass: "table table-borderless table-data3" }, [
+        _c("thead", [
+          _c(
             "tr",
             [
-              _c("td", [_vm._v(_vm._s(student.full_name))]),
-              _vm._v(" "),
-              _vm._l(student.days, function(day) {
-                return _c("td", [
-                  _c(
-                    "select",
-                    {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: day.number,
-                          expression: "day.number"
-                        }
-                      ],
-                      on: {
-                        change: [
-                          function($event) {
-                            var $$selectedVal = Array.prototype.filter
-                              .call($event.target.options, function(o) {
-                                return o.selected
-                              })
-                              .map(function(o) {
-                                var val = "_value" in o ? o._value : o.value
-                                return val
-                              })
-                            _vm.$set(
-                              day,
-                              "number",
-                              $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
-                            )
-                          },
-                          function($event) {
-                            _vm.saveNumber(
-                              day.number,
-                              student.student_id,
-                              day.day
-                            )
-                          }
-                        ]
-                      }
-                    },
-                    [
-                      _c("option", { attrs: { value: "1" } }, [_vm._v("1")]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "2" } }, [_vm._v("2")]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "3" } }, [_vm._v("3")]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "4" } }, [_vm._v("4")]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "5" } }, [_vm._v("5")]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "н" } }, [_vm._v("н")]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "." } }, [_vm._v(".")]),
-                      _vm._v(" "),
-                      _c("option", { attrs: { value: "" } })
-                    ]
-                  )
-                ])
+              _vm._l(_vm.th, function(item) {
+                return _c("th", [_vm._v(_vm._s(item.name))])
               }),
               _vm._v(" "),
-              _c("td")
+              _c("th", [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.newTh,
+                      expression: "newTh"
+                    }
+                  ],
+                  staticStyle: { width: "50px", "padding-left": "20px" },
+                  attrs: { placeholder: "+" },
+                  domProps: { value: _vm.newTh },
+                  on: {
+                    keyup: function($event) {
+                      if (
+                        !("button" in $event) &&
+                        _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                      ) {
+                        return null
+                      }
+                      _vm.addTh()
+                    },
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.newTh = $event.target.value
+                    }
+                  }
+                })
+              ])
             ],
             2
           )
-        })
-      )
+        ]),
+        _vm._v(" "),
+        _c(
+          "tbody",
+          _vm._l(_vm.students, function(student) {
+            return _c(
+              "tr",
+              [
+                _c("td", [_vm._v(_vm._s(student.full_name))]),
+                _vm._v(" "),
+                _vm._l(student.days, function(day) {
+                  return _c("td", [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: day.number,
+                            expression: "day.number"
+                          }
+                        ],
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                day,
+                                "number",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            },
+                            function($event) {
+                              _vm.saveNumber(
+                                day.number,
+                                student.student_id,
+                                day.day
+                              )
+                            }
+                          ]
+                        }
+                      },
+                      [
+                        _c("option", { attrs: { value: "1" } }, [_vm._v("1")]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "2" } }, [_vm._v("2")]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "3" } }, [_vm._v("3")]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "4" } }, [_vm._v("4")]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "5" } }, [_vm._v("5")]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "н" } }, [_vm._v("н")]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: "." } }, [_vm._v(".")]),
+                        _vm._v(" "),
+                        _c("option", { attrs: { value: " " } })
+                      ]
+                    )
+                  ])
+                }),
+                _vm._v(" "),
+                _c("td")
+              ],
+              2
+            )
+          })
+        )
+      ])
     ])
   ])
 }

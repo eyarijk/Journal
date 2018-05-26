@@ -47,7 +47,7 @@ class JournalsController extends Controller
     {
         $func = function ($num){ echo $this->getNameOfMonth($num); };
 
-        $month = Journal::where('teacher_group_id',$couple)->pluck('month')->toArray();
+        $month = Journal::where('teacher_group_id',$couple->id)->pluck('month')->toArray();
 
         $freeMonth = array_diff(range(1,12),$month);
 
@@ -59,6 +59,13 @@ class JournalsController extends Controller
         $students = $couple->group->student;
         $month = $request->month;
         $year  = date('Y');
+
+        #check
+
+        $check = Journal::where('teacher_group_id',$couple->id)->where('month',$month)->where('year',$year)->first();
+
+        if ($check)
+            abort(404);
 
         foreach ($students as $student) {
             $newJournal = new Journal();

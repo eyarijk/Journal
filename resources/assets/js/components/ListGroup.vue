@@ -1,13 +1,15 @@
 <template>
-    <div class="table-responsive m-b-40">
-        <table class="table table-borderless table-data3">
-            <thead>
-            <tr>
-                <th v-for="item in th">{{ item.name }}</th>
-                <th><input style="width: 50px;padding-left: 20px;" placeholder="+" @keyup.enter="addTh()" v-model="newTh"></th>
-            </tr>
-            </thead>
-            <tbody>
+    <div>
+        <h3 class="title-5 m-b-35">Hello</h3>
+        <div class="table-responsive m-b-40">
+            <table class="table table-borderless table-data3">
+                <thead>
+                <tr>
+                    <th v-for="item in th">{{ item.name }}</th>
+                    <th><input style="width: 50px;padding-left: 20px;" placeholder="+" @keyup.enter="addTh()" v-model="newTh"></th>
+                </tr>
+                </thead>
+                <tbody>
                 <tr v-for="student in students">
                     <td>{{ student.full_name }}</td>
                     <td v-for="day in student.days">
@@ -19,13 +21,14 @@
                             <option value="5">5</option>
                             <option value="н">н</option>
                             <option value=".">.</option>
-                            <option value=""></option>
+                            <option value=" "></option>
                         </select>
                     </td>
                     <td></td>
                 </tr>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
@@ -63,14 +66,19 @@
                for (var i = 0; i < this.students.length; i++) {
                    this.students[i].days.push({
                        day:this.newTh,
-                       number: null,
+                       number: ' ',
                    });
                }
-               this.th.push({name:this.newTh});
-               this.newTh = null;
-            },
-            formatNameForInput: function (student,day) {
-                return 'student:' + student + ';day:' + day;
+
+
+               this.$http.post('/api/journal/store/day?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple,{day:this.newTh}).then(function(response) {
+
+               }, function (error) {
+                   console.log(error);
+               });
+
+                this.th.push({name:this.newTh});
+                this.newTh = null;
             },
             saveNumber: function (number,student,day) {
                 this.$http.post('/api/journal/save/?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple,{ number:number,day:day,student:student }).then(function(response) {

@@ -2,34 +2,51 @@
     <div>
         <div class="row">
             <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-body card-block">
-                            <div class="form-group">
-                                <div class="form-check">
-                                    <div class="checkbox">
-                                        <label for="checkbox1" class="form-check-label ">
-                                            <input type="checkbox" id="checkbox1" name="checkbox1" value="option1" class="form-check-input">Option 1
-                                        </label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label for="checkbox2" class="form-check-label ">
-                                            <input type="checkbox" id="checkbox2" name="checkbox2" value="option2" class="form-check-input"> Option 2
-                                        </label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label for="checkbox3" class="form-check-label ">
-                                            <input type="checkbox" id="checkbox3" name="checkbox3" value="option3" class="form-check-input"> Option 3
-                                        </label>
-                                    </div>
+                <h3>Група: {{ couple.group.name}}</h3>
+                <div class="card">
+                    <div class="card-body card-block">
+                        <div class="form-group">
+                            <div class="form-check">
+                                <div class="checkbox" v-for="month in months">
+                                    <label :for="'month_'+ month.key" class="form-check-label ">
+                                        <input type="checkbox" :id="'month_'+ month.key" v-model="selectMonth" :value="month.key" class="form-check-input">{{ month.name }}
+                                    </label>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-success btn-sm">
-                                <i class="fa fa-users"></i> Створити
-                            </button>
+                        <div class="form-group">
+                            <select v-model="year" class="form-control">
+                                <option>2018</option>
+                                <option>2017</option>
+                            </select>
                         </div>
                     </div>
+
+                    <div class="card-footer">
+                        <button @click="getBlackList" class="btn btn-success btn-sm">
+                            <i class="fa fa-users"></i> Отримати чорний список
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive table-responsive-data2">
+                    <table class="table table-data2">
+                        <thead>
+                        <tr>
+                            <th>П.І.</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="tr-shadow">
+                            <td></td>
+                        </tr>
+                        <tr class="spacer"></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -37,7 +54,7 @@
 
 <script>
     export default {
-        props:[],
+        props:['couple'],
         data: function () {
             return {
                months: [
@@ -66,13 +83,45 @@
                        key: 6,
                    }
                    ,{
-                       name: '',
+                       name: 'Вересень',
                        key: 9,
                    }
+                   ,{
+                       name: 'Жовтень',
+                       key: 10,
+                   }
+                   ,{
+                       name: 'Листопад',
+                       key: 11,
+                   }
+                   ,{
+                       name: 'Грудень',
+                       key: 12,
+                   }
                ],
+               selectMonth: [],
+               year: null,
+               ban: [],
             }
         },
         mounted() {},
-        methods: {}
+        methods: {
+            getBlackList: function () {
+                if (this.selectMonth.length < 1){
+                    alert('Оберіть місяці!');
+                    return false;
+                }
+
+                this.$http.post('/api/black-list/?group=' + this.couple.group.id,{year:this.year, months:this.selectMonth }).then(function(response) {
+                    if (response.data.ban.length < 1){
+                        alert('Чорний список пустий!');
+                    } else {
+                        this.ban = response.data.ban;
+                    }
+                }, function (error) {
+                    console.log(error);
+                });
+            }
+        }
     }
 </script>

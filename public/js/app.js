@@ -13634,9 +13634,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: [],
+    props: ['couple'],
     data: function data() {
         return {
             months: [{
@@ -13658,14 +13675,43 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 name: 'Червень',
                 key: 6
             }, {
-                name: '',
+                name: 'Вересень',
                 key: 9
-            }]
+            }, {
+                name: 'Жовтень',
+                key: 10
+            }, {
+                name: 'Листопад',
+                key: 11
+            }, {
+                name: 'Грудень',
+                key: 12
+            }],
+            selectMonth: [],
+            year: null,
+            ban: []
         };
     },
     mounted: function mounted() {},
 
-    methods: {}
+    methods: {
+        getBlackList: function getBlackList() {
+            if (this.selectMonth.length < 1) {
+                alert('Оберіть місяці!');
+                return false;
+            }
+
+            this.$http.post('/api/black-list/?group=' + this.couple.group.id, { year: this.year, months: this.selectMonth }).then(function (response) {
+                if (response.data.ban.length < 1) {
+                    alert('Чорний список пустий!');
+                } else {
+                    this.ban = response.data.ban;
+                }
+            }, function (error) {
+                console.log(error);
+            });
+        }
+    }
 });
 
 /***/ }),
@@ -13676,105 +13722,150 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-12" }, [
+        _c("h3", [_vm._v("Група: " + _vm._s(_vm.couple.group.name))]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-body card-block" }, [
+            _c("div", { staticClass: "form-group" }, [
+              _c(
+                "div",
+                { staticClass: "form-check" },
+                _vm._l(_vm.months, function(month) {
+                  return _c("div", { staticClass: "checkbox" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "form-check-label ",
+                        attrs: { for: "month_" + month.key }
+                      },
+                      [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.selectMonth,
+                              expression: "selectMonth"
+                            }
+                          ],
+                          staticClass: "form-check-input",
+                          attrs: { type: "checkbox", id: "month_" + month.key },
+                          domProps: {
+                            value: month.key,
+                            checked: Array.isArray(_vm.selectMonth)
+                              ? _vm._i(_vm.selectMonth, month.key) > -1
+                              : _vm.selectMonth
+                          },
+                          on: {
+                            change: function($event) {
+                              var $$a = _vm.selectMonth,
+                                $$el = $event.target,
+                                $$c = $$el.checked ? true : false
+                              if (Array.isArray($$a)) {
+                                var $$v = month.key,
+                                  $$i = _vm._i($$a, $$v)
+                                if ($$el.checked) {
+                                  $$i < 0 &&
+                                    (_vm.selectMonth = $$a.concat([$$v]))
+                                } else {
+                                  $$i > -1 &&
+                                    (_vm.selectMonth = $$a
+                                      .slice(0, $$i)
+                                      .concat($$a.slice($$i + 1)))
+                                }
+                              } else {
+                                _vm.selectMonth = $$c
+                              }
+                            }
+                          }
+                        }),
+                        _vm._v(
+                          _vm._s(month.name) +
+                            "\n                                "
+                        )
+                      ]
+                    )
+                  ])
+                })
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.year,
+                      expression: "year"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.year = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    }
+                  }
+                },
+                [
+                  _c("option", [_vm._v("2018")]),
+                  _vm._v(" "),
+                  _c("option", [_vm._v("2017")])
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-footer" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-success btn-sm",
+                on: { click: _vm.getBlackList }
+              },
+              [
+                _c("i", { staticClass: "fa fa-users" }),
+                _vm._v(" Отримати чорний список\n                    ")
+              ]
+            )
+          ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _vm._m(0)
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-12" }, [
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-body card-block" }, [
-              _c("div", { staticClass: "form-group" }, [
-                _c("div", { staticClass: "form-check" }, [
-                  _c("div", { staticClass: "checkbox" }, [
-                    _c(
-                      "label",
-                      {
-                        staticClass: "form-check-label ",
-                        attrs: { for: "checkbox1" }
-                      },
-                      [
-                        _c("input", {
-                          staticClass: "form-check-input",
-                          attrs: {
-                            type: "checkbox",
-                            id: "checkbox1",
-                            name: "checkbox1",
-                            value: "option1"
-                          }
-                        }),
-                        _vm._v("Option 1\n                                    ")
-                      ]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "checkbox" }, [
-                    _c(
-                      "label",
-                      {
-                        staticClass: "form-check-label ",
-                        attrs: { for: "checkbox2" }
-                      },
-                      [
-                        _c("input", {
-                          staticClass: "form-check-input",
-                          attrs: {
-                            type: "checkbox",
-                            id: "checkbox2",
-                            name: "checkbox2",
-                            value: "option2"
-                          }
-                        }),
-                        _vm._v(
-                          " Option 2\n                                    "
-                        )
-                      ]
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "checkbox" }, [
-                    _c(
-                      "label",
-                      {
-                        staticClass: "form-check-label ",
-                        attrs: { for: "checkbox3" }
-                      },
-                      [
-                        _c("input", {
-                          staticClass: "form-check-input",
-                          attrs: {
-                            type: "checkbox",
-                            id: "checkbox3",
-                            name: "checkbox3",
-                            value: "option3"
-                          }
-                        }),
-                        _vm._v(
-                          " Option 3\n                                    "
-                        )
-                      ]
-                    )
-                  ])
-                ])
-              ])
-            ]),
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-12" }, [
+        _c("div", { staticClass: "table-responsive table-responsive-data2" }, [
+          _c("table", { staticClass: "table table-data2" }, [
+            _c("thead", [_c("tr", [_c("th", [_vm._v("П.І.")])])]),
             _vm._v(" "),
-            _c("div", { staticClass: "card-footer" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-success btn-sm",
-                  attrs: { type: "submit" }
-                },
-                [
-                  _c("i", { staticClass: "fa fa-users" }),
-                  _vm._v(" Створити\n                        ")
-                ]
-              )
+            _c("tbody", [
+              _c("tr", { staticClass: "tr-shadow" }, [_c("td")]),
+              _vm._v(" "),
+              _c("tr", { staticClass: "spacer" })
             ])
           ])
         ])

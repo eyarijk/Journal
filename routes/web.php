@@ -28,8 +28,7 @@ Route::get('/journal/{mouth}/{year}/couple/{couple}','Teacher\JournalsController
 Route::get('/journal/create/{couple}','Teacher\JournalsController@create')->name('journal.create');
 Route::post('/journal/store/{couple}','Teacher\JournalsController@store')->name('journal.store');
 //Black list
-Route::get('/black-list/','BlackListController@index')->name('black-list.index');
-Route::get('/black-list/{couple}','BlackListController@show')->name('black-list.show');
+Route::get('/black-list/{couple}','BlackListController@index')->name('black-list.index');
 /*
  * Admin Routes
  */

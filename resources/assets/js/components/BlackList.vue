@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12" v-show="this.ban.length < 1">
                 <h3>Група: {{ couple.group.name}}</h3>
                 <div class="card">
                     <div class="card-body card-block">
@@ -30,7 +30,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row" v-show="this.ban.length > 0">
             <div class="col-md-12">
                 <div class="table-responsive table-responsive-data2">
                     <table class="table table-data2">
@@ -40,12 +40,15 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="tr-shadow">
-                            <td></td>
+                        <tr class="tr-shadow" v-for="user in ban">
+                            <td>{{ user }}</td>
                         </tr>
                         <tr class="spacer"></tr>
                         </tbody>
                     </table>
+                    <button @click="backStep" class="btn btn-success btn-sm">
+                       Назад
+                    </button>
                 </div>
             </div>
         </div>
@@ -112,15 +115,21 @@
                     return false;
                 }
 
-                this.$http.post('/api/black-list/?group=' + this.couple.group.id,{year:this.year, months:this.selectMonth }).then(function(response) {
+                this.$http.post('/api/black-list?group=' + this.couple.group.id,{year:this.year, months:this.selectMonth }).then(function(response) {
                     if (response.data.ban.length < 1){
                         alert('Чорний список пустий!');
+                        this.ban = [];
                     } else {
                         this.ban = response.data.ban;
                     }
                 }, function (error) {
                     console.log(error);
                 });
+            },
+            backStep: function() {
+                this.ban = [];
+                this.selectMonth = [];
+                this.year = null;
             }
         }
     }

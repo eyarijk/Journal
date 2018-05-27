@@ -39,6 +39,7 @@ class JournalsController extends Controller
 
         $nameOfMonth = $this->getNameOfMonth($month);
 
+        $couple = TeacherGroup::with('group')->with('subject')->first()->toArray();
 
         return view('teacher.journal.show',compact('journals','sizeOfMonth','nameOfMonth','year','month','couple'));
     }

@@ -8,7 +8,10 @@
                 <div class="table-data__tool-right">
                     <a style="color:#fff;" href="{{ route('journal.create',$couple) }}" class="au-btn au-btn-icon au-btn--green au-btn--small">
                         <i class="zmdi zmdi-plus"></i>Створити журнал</a>
+                    <a href="{{ route('black-list.index') }}" class="btn btn-dark">
+                        Чорний список</a>
                 </div>
+
             </div>
             <div class="table-responsive table-responsive-data2">
                 @if (sizeof($times) > 0)

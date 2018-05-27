@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3 class="title-5 m-b-35">Hello</h3>
+        <h3 class="title-5 m-b-35">Група {{ couple.group.name }} - предмет: {{ couple.subject.name}}</h3>
         <div class="table-responsive m-b-40">
             <table class="table table-borderless table-data3">
                 <thead>
@@ -43,8 +43,8 @@
             }
         },
         mounted() {
-            this.$http.get('/api/journal/?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple).then(function(response) {
-                console.log('/api/journal/?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple);
+            this.$http.get('/api/journal/?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple.id).then(function(response) {
+                console.log('/api/journal/?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple.id);
                 this.th       = response.data.th;
                 this.students = response.data.students;
             }, function (error) {
@@ -71,7 +71,7 @@
                }
 
 
-               this.$http.post('/api/journal/store/day?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple,{day:this.newTh}).then(function(response) {
+               this.$http.post('/api/journal/store/day?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple.id,{day:this.newTh}).then(function(response) {
 
                }, function (error) {
                    console.log(error);
@@ -81,7 +81,7 @@
                 this.newTh = null;
             },
             saveNumber: function (number,student,day) {
-                this.$http.post('/api/journal/save/?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple,{ number:number,day:day,student:student }).then(function(response) {
+                this.$http.post('/api/journal/save/?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple.id,{ number:number,day:day,student:student }).then(function(response) {
 
                 }, function (error) {
                     console.log(error);

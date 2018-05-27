@@ -126,6 +126,8 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_resource__["a" /* default */]);
 
 Vue.component('list-group', __webpack_require__(9));
 
+Vue.component('black-list', __webpack_require__(24));
+
 var app = new Vue({
   el: '#app'
 });
@@ -13328,8 +13330,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     mounted: function mounted() {
-        this.$http.get('/api/journal/?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple).then(function (response) {
-            console.log('/api/journal/?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple);
+        this.$http.get('/api/journal/?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple.id).then(function (response) {
+            console.log('/api/journal/?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple.id);
             this.th = response.data.th;
             this.students = response.data.students;
         }, function (error) {
@@ -13355,7 +13357,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 });
             }
 
-            this.$http.post('/api/journal/store/day?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple, { day: this.newTh }).then(function (response) {}, function (error) {
+            this.$http.post('/api/journal/store/day?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple.id, { day: this.newTh }).then(function (response) {}, function (error) {
                 console.log(error);
             });
 
@@ -13363,7 +13365,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.newTh = null;
         },
         saveNumber: function saveNumber(number, student, day) {
-            this.$http.post('/api/journal/save/?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple, { number: number, day: day, student: student }).then(function (response) {}, function (error) {
+            this.$http.post('/api/journal/save/?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple.id, { number: number, day: day, student: student }).then(function (response) {}, function (error) {
                 console.log(error);
             });
         }
@@ -13379,7 +13381,14 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("h3", { staticClass: "title-5 m-b-35" }, [_vm._v("Hello")]),
+    _c("h3", { staticClass: "title-5 m-b-35" }, [
+      _vm._v(
+        "Група " +
+          _vm._s(_vm.couple.group.name) +
+          " - предмет: " +
+          _vm._s(_vm.couple.subject.name)
+      )
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "table-responsive m-b-40" }, [
       _c("table", { staticClass: "table table-borderless table-data3" }, [
@@ -13524,6 +13533,263 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */,
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(10)
+/* script */
+var __vue_script__ = __webpack_require__(25)
+/* template */
+var __vue_template__ = __webpack_require__(26)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/BlackList.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-05e47696", Component.options)
+  } else {
+    hotAPI.reload("data-v-05e47696", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 25 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: [],
+    data: function data() {
+        return {
+            months: [{
+                name: 'Січень',
+                key: 1
+            }, {
+                name: 'Лютий',
+                key: 2
+            }, {
+                name: 'Березень',
+                key: 3
+            }, {
+                name: 'Квітень',
+                key: 4
+            }, {
+                name: 'Травень',
+                key: 5
+            }, {
+                name: 'Червень',
+                key: 6
+            }, {
+                name: '',
+                key: 9
+            }]
+        };
+    },
+    mounted: function mounted() {},
+
+    methods: {}
+});
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm._m(0)
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-md-12" }, [
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-body card-block" }, [
+              _c("div", { staticClass: "form-group" }, [
+                _c("div", { staticClass: "form-check" }, [
+                  _c("div", { staticClass: "checkbox" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "form-check-label ",
+                        attrs: { for: "checkbox1" }
+                      },
+                      [
+                        _c("input", {
+                          staticClass: "form-check-input",
+                          attrs: {
+                            type: "checkbox",
+                            id: "checkbox1",
+                            name: "checkbox1",
+                            value: "option1"
+                          }
+                        }),
+                        _vm._v("Option 1\n                                    ")
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "checkbox" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "form-check-label ",
+                        attrs: { for: "checkbox2" }
+                      },
+                      [
+                        _c("input", {
+                          staticClass: "form-check-input",
+                          attrs: {
+                            type: "checkbox",
+                            id: "checkbox2",
+                            name: "checkbox2",
+                            value: "option2"
+                          }
+                        }),
+                        _vm._v(
+                          " Option 2\n                                    "
+                        )
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "checkbox" }, [
+                    _c(
+                      "label",
+                      {
+                        staticClass: "form-check-label ",
+                        attrs: { for: "checkbox3" }
+                      },
+                      [
+                        _c("input", {
+                          staticClass: "form-check-input",
+                          attrs: {
+                            type: "checkbox",
+                            id: "checkbox3",
+                            name: "checkbox3",
+                            value: "option3"
+                          }
+                        }),
+                        _vm._v(
+                          " Option 3\n                                    "
+                        )
+                      ]
+                    )
+                  ])
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-footer" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-success btn-sm",
+                  attrs: { type: "submit" }
+                },
+                [
+                  _c("i", { staticClass: "fa fa-users" }),
+                  _vm._v(" Створити\n                        ")
+                ]
+              )
+            ])
+          ])
+        ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-05e47696", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

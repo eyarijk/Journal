@@ -5,15 +5,25 @@ namespace App\Http\Controllers;
 use App\Group;
 use App\Journal;
 use App\Student;
-use App\TeacherGroup;
 use Illuminate\Http\Request;
 
 class BlackListController extends Controller
 {
-    public function index(int $couple)
+    public function index()
     {
-        $couple = TeacherGroup::with('group')->with('subject')->where('id',$couple)->first();
-        return view('black-list.index',compact('couple'));
+        $teacher = auth()->id();
+
+        $groups = Group::whereHas('couple',function ($q) use ($teacher){
+            $q->where('user_id',$teacher);
+        })->get()->toArray();
+
+        $years = Journal::whereHas('teacherGroup',function ($q) use ($groups){
+            $q->whereIn('group_id',$groups);
+        })->pluck('year')->toArray();
+
+        $years = array_unique($years);
+
+        return view('black-list.index',compact('groups','years'));
     }
 
     public function show(Request $request)

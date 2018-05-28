@@ -11,7 +11,7 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $teacher = 1;
+        $teacher = auth()->id();
         $couples = TeacherGroup::where('user_id',$teacher)->get();
 
         return view('teacher.index',compact('couples'));

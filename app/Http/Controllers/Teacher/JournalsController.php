@@ -14,7 +14,7 @@ class JournalsController extends Controller
 
     public function couple(TeacherGroup $couple)
     {
-        $teacher = 1;
+        $teacher = auth()->id();
 
         if ($couple->user_id != $teacher)
             abort(404);

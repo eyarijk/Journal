@@ -17,4 +17,9 @@ class Group extends Model
     {
         return $this->belongsTo('App\Faculty');
     }
+
+    public function couple()
+    {
+        return $this->hasMany('App\TeacherGroup');
+    }
 }

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -92,19 +92,128 @@ module.exports = g;
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-__webpack_require__(2);
-module.exports = __webpack_require__(13);
+/* globals __VUE_SSR_CONTEXT__ */
+
+// IMPORTANT: Do NOT use ES2015 features in this file.
+// This module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle.
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  functionalTemplate,
+  injectStyles,
+  scopeId,
+  moduleIdentifier /* server only */
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+    options._compiled = true
+  }
+
+  // functional template
+  if (functionalTemplate) {
+    options.functional = true
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  var hook
+  if (moduleIdentifier) { // server build
+    hook = function (context) {
+      // 2.3 injection
+      context =
+        context || // cached call
+        (this.$vnode && this.$vnode.ssrContext) || // stateful
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      // 2.2 with runInNewContext: true
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__
+      }
+      // inject component styles
+      if (injectStyles) {
+        injectStyles.call(this, context)
+      }
+      // register component module identifier for async chunk inferrence
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier)
+      }
+    }
+    // used by ssr in case component is cached and beforeCreate
+    // never gets called
+    options._ssrRegister = hook
+  } else if (injectStyles) {
+    hook = injectStyles
+  }
+
+  if (hook) {
+    var functional = options.functional
+    var existing = functional
+      ? options.render
+      : options.beforeCreate
+
+    if (!functional) {
+      // inject component registration as beforeCreate hook
+      options.beforeCreate = existing
+        ? [].concat(existing, hook)
+        : [hook]
+    } else {
+      // for template-only hot-reload because in that case the render fn doesn't
+      // go through the normalizer
+      options._injectStyles = hook
+      // register for functioal component in vue file
+      options.render = function renderWithStyleInjection (h, context) {
+        hook.call(context)
+        return existing(h, context)
+      }
+    }
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
 
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(3);
+module.exports = __webpack_require__(16);
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_resource__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_resource__ = __webpack_require__(8);
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -112,7 +221,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-window.Vue = __webpack_require__(3);
+window.Vue = __webpack_require__(4);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -124,16 +233,16 @@ window.Vue = __webpack_require__(3);
 
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue_resource__["a" /* default */]);
 
-Vue.component('list-group', __webpack_require__(9));
+Vue.component('list-group', __webpack_require__(10));
 
-Vue.component('black-list', __webpack_require__(24));
+Vue.component('black-list', __webpack_require__(13));
 
 var app = new Vue({
   el: '#app'
 });
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11096,10 +11205,10 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(4).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(5).setImmediate))
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
@@ -11155,7 +11264,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(5);
+__webpack_require__(6);
 // On some exotic environments, it's not clear which object `setimmediate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -11169,7 +11278,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -11359,10 +11468,10 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(7)))
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -11552,7 +11661,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12650,7 +12759,7 @@ function xhrClient (request) {
 
 function nodeClient (request) {
 
-    var client = __webpack_require__(8);
+    var client = __webpack_require__(9);
 
     return new PromiseObj(function (resolve) {
 
@@ -13118,17 +13227,17 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(10)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(11)
 /* template */
@@ -13168,115 +13277,6 @@ if (false) {(function () {
 })()}
 
 module.exports = Component.exports
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports) {
-
-/* globals __VUE_SSR_CONTEXT__ */
-
-// IMPORTANT: Do NOT use ES2015 features in this file.
-// This module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle.
-
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  functionalTemplate,
-  injectStyles,
-  scopeId,
-  moduleIdentifier /* server only */
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
-
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
-  }
-
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-    options._compiled = true
-  }
-
-  // functional template
-  if (functionalTemplate) {
-    options.functional = true
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
-
-  var hook
-  if (moduleIdentifier) { // server build
-    hook = function (context) {
-      // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
-      // 2.2 with runInNewContext: true
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__
-      }
-      // inject component styles
-      if (injectStyles) {
-        injectStyles.call(this, context)
-      }
-      // register component module identifier for async chunk inferrence
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier)
-      }
-    }
-    // used by ssr in case component is cached and beforeCreate
-    // never gets called
-    options._ssrRegister = hook
-  } else if (injectStyles) {
-    hook = injectStyles
-  }
-
-  if (hook) {
-    var functional = options.functional
-    var existing = functional
-      ? options.render
-      : options.beforeCreate
-
-    if (!functional) {
-      // inject component registration as beforeCreate hook
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
-    } else {
-      // for template-only hot-reload because in that case the render fn doesn't
-      // go through the normalizer
-      options._injectStyles = hook
-      // register for functioal component in vue file
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return existing(h, context)
-      }
-    }
-  }
-
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
-  }
-}
 
 
 /***/ }),
@@ -13530,30 +13530,14 @@ if (false) {
 
 /***/ }),
 /* 13 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */,
-/* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */,
-/* 23 */,
-/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(10)
+var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(25)
+var __vue_script__ = __webpack_require__(14)
 /* template */
-var __vue_template__ = __webpack_require__(26)
+var __vue_template__ = __webpack_require__(15)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -13592,7 +13576,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 25 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13654,9 +13638,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['couple'],
+    props: ['groups', 'years'],
     data: function data() {
         return {
             months: [{
@@ -13692,7 +13684,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }],
             selectMonth: [],
             year: null,
-            ban: []
+            ban: [],
+            group: null
         };
     },
     mounted: function mounted() {},
@@ -13703,8 +13696,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 alert('Оберіть місяці!');
                 return false;
             }
+            if (this.year == null) {
+                alert('Оберіть рік!');
+                return false;
+            }
+            if (this.group == null) {
+                alert('Оберіть групу!');
+                return false;
+            }
 
-            this.$http.post('/api/black-list?group=' + this.couple.group.id, { year: this.year, months: this.selectMonth }).then(function (response) {
+            this.$http.post('/api/black-list?group=' + this.group, { year: this.year, months: this.selectMonth }).then(function (response) {
                 if (response.data.ban.length < 1) {
                     alert('Чорний список пустий!');
                     this.ban = [];
@@ -13719,12 +13720,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.ban = [];
             this.selectMonth = [];
             this.year = null;
+            this.group = null;
+        },
+        getGroup: function getGroup(id) {
+            for (var i = 0; i < this.groups.length; i++) {
+                if (this.groups[i].id == id) {
+                    return this.groups[i].name;
+                }
+            }
         }
     }
 });
 
 /***/ }),
-/* 26 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -13747,78 +13756,131 @@ var render = function() {
           staticClass: "col-md-12"
         },
         [
-          _c("h3", [_vm._v("Група: " + _vm._s(_vm.couple.group.name))]),
+          _c("h3", [_vm._v("Розрахунок чорного списка!")]),
           _vm._v(" "),
           _c("div", { staticClass: "card" }, [
             _c("div", { staticClass: "card-body card-block" }, [
               _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "group" } }, [_vm._v("Група")]),
+                _vm._v(" "),
                 _c(
-                  "div",
-                  { staticClass: "form-check" },
-                  _vm._l(_vm.months, function(month) {
-                    return _c("div", { staticClass: "checkbox" }, [
-                      _c(
-                        "label",
-                        {
-                          staticClass: "form-check-label ",
-                          attrs: { for: "month_" + month.key }
-                        },
-                        [
-                          _c("input", {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.selectMonth,
-                                expression: "selectMonth"
-                              }
-                            ],
-                            staticClass: "form-check-input",
-                            attrs: {
-                              type: "checkbox",
-                              id: "month_" + month.key
-                            },
-                            domProps: {
-                              value: month.key,
-                              checked: Array.isArray(_vm.selectMonth)
-                                ? _vm._i(_vm.selectMonth, month.key) > -1
-                                : _vm.selectMonth
-                            },
-                            on: {
-                              change: function($event) {
-                                var $$a = _vm.selectMonth,
-                                  $$el = $event.target,
-                                  $$c = $$el.checked ? true : false
-                                if (Array.isArray($$a)) {
-                                  var $$v = month.key,
-                                    $$i = _vm._i($$a, $$v)
-                                  if ($$el.checked) {
-                                    $$i < 0 &&
-                                      (_vm.selectMonth = $$a.concat([$$v]))
-                                  } else {
-                                    $$i > -1 &&
-                                      (_vm.selectMonth = $$a
-                                        .slice(0, $$i)
-                                        .concat($$a.slice($$i + 1)))
-                                  }
-                                } else {
-                                  _vm.selectMonth = $$c
-                                }
-                              }
-                            }
-                          }),
-                          _vm._v(
-                            _vm._s(month.name) +
-                              "\n                                "
-                          )
-                        ]
-                      )
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.group,
+                        expression: "group"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { id: "group" },
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.group = $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      }
+                    }
+                  },
+                  _vm._l(_vm.groups, function(item) {
+                    return _c("option", { domProps: { value: item.id } }, [
+                      _vm._v(_vm._s(item.name))
                     ])
                   })
                 )
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "form-group" }, [
+                _c(
+                  "div",
+                  { staticClass: "form-check" },
+                  [
+                    _c("label", { attrs: { for: "months" } }, [
+                      _vm._v("Місяці")
+                    ]),
+                    _vm._v(" "),
+                    _vm._l(_vm.months, function(month) {
+                      return _c(
+                        "div",
+                        { staticClass: "checkbox", attrs: { id: "months" } },
+                        [
+                          _c(
+                            "label",
+                            {
+                              staticClass: "form-check-label ",
+                              attrs: { for: "month_" + month.key }
+                            },
+                            [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.selectMonth,
+                                    expression: "selectMonth"
+                                  }
+                                ],
+                                staticClass: "form-check-input",
+                                attrs: {
+                                  type: "checkbox",
+                                  id: "month_" + month.key
+                                },
+                                domProps: {
+                                  value: month.key,
+                                  checked: Array.isArray(_vm.selectMonth)
+                                    ? _vm._i(_vm.selectMonth, month.key) > -1
+                                    : _vm.selectMonth
+                                },
+                                on: {
+                                  change: function($event) {
+                                    var $$a = _vm.selectMonth,
+                                      $$el = $event.target,
+                                      $$c = $$el.checked ? true : false
+                                    if (Array.isArray($$a)) {
+                                      var $$v = month.key,
+                                        $$i = _vm._i($$a, $$v)
+                                      if ($$el.checked) {
+                                        $$i < 0 &&
+                                          (_vm.selectMonth = $$a.concat([$$v]))
+                                      } else {
+                                        $$i > -1 &&
+                                          (_vm.selectMonth = $$a
+                                            .slice(0, $$i)
+                                            .concat($$a.slice($$i + 1)))
+                                      }
+                                    } else {
+                                      _vm.selectMonth = $$c
+                                    }
+                                  }
+                                }
+                              }),
+                              _vm._v(
+                                _vm._s(month.name) +
+                                  "\n                                "
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    })
+                  ],
+                  2
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "year" } }, [_vm._v("Рік")]),
+                _vm._v(" "),
                 _c(
                   "select",
                   {
@@ -13831,6 +13893,7 @@ var render = function() {
                       }
                     ],
                     staticClass: "form-control",
+                    attrs: { id: "year" },
                     on: {
                       change: function($event) {
                         var $$selectedVal = Array.prototype.filter
@@ -13847,11 +13910,9 @@ var render = function() {
                       }
                     }
                   },
-                  [
-                    _c("option", [_vm._v("2018")]),
-                    _vm._v(" "),
-                    _c("option", [_vm._v("2017")])
-                  ]
+                  _vm._l(_vm.years, function(item) {
+                    return _c("option", [_vm._v(_vm._s(item))])
+                  })
                 )
               ])
             ]),
@@ -13889,6 +13950,8 @@ var render = function() {
       },
       [
         _c("div", { staticClass: "col-md-12" }, [
+          _c("h3", [_vm._v("Група: " + _vm._s(_vm.getGroup(this.group)))]),
+          _vm._v(" "),
           _c(
             "div",
             { staticClass: "table-responsive table-responsive-data2" },
@@ -13931,7 +13994,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("thead", [_c("tr", [_c("th", [_vm._v("П.І.")])])])
+    return _c("thead", [_c("tr", [_c("th", [_vm._v("Прізвище Ім'я")])])])
   }
 ]
 render._withStripped = true
@@ -13942,6 +14005,12 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-05e47696", module.exports)
   }
 }
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

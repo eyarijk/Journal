@@ -13,6 +13,11 @@ class TeacherGroup extends Model
         return $this->hasMany('App\Journal');
     }
 
+    public function rating()
+    {
+        return $this->hasMany('App\Rating');
+    }
+
     public function subject()
     {
         return $this->belongsTo('App\Subject');

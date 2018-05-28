@@ -14,6 +14,11 @@ class Student extends Model
         return $this->hasMany('App\Journal');
     }
 
+    public function rating()
+    {
+        return $this->hasMany('App\Rating');
+    }
+
     public function group()
     {
         return $this->belongsTo('App\Group');

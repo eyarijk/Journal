@@ -40,6 +40,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/journal/store/{couple}','Teacher\JournalsController@store')->name('journal.store');
 //Black list
     Route::get('/black-list/','BlackListController@index')->name('black-list.index');
+    // Rating
+    Route::get('/rating','Teacher\RatingsController@index')->name('rating.index');
+    Route::get('/rating/show/{group}','Teacher\RatingsController@show')->name('rating.show');
     /*
      * Admin Routes
      */

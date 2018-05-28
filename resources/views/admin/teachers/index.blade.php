@@ -28,7 +28,7 @@
                                    <td>{{ $teacher->last_name }}</td>
                                    <td>{{ $teacher->first_name }}</td>
                                    <td>
-                                       <span class="block-email">l{{ $teacher->email }}</span>
+                                       <span class="block-email">{{ $teacher->email }}</span>
                                    </td>
                                    <td class="desc">{{ $teacher->username }}</td>
                                    <td>

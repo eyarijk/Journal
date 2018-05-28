@@ -81,7 +81,7 @@
                 this.newTh = null;
             },
             saveNumber: function (number,student,day) {
-                this.$http.post('/api/journal/save/?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple.id,{ number:number,day:day,student:student }).then(function(response) {
+                this.$http.post('/api/journal/save?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple.id,{ number:number,day:day,student:student }).then(function(response) {
 
                 }, function (error) {
                     console.log(error);

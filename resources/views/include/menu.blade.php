@@ -39,10 +39,14 @@
                     <a class="js-arrow" href="{{ route('teacher.index') }}">
                         <i class="fas fa-table"></i>Пари</a>
                 </li>
-                    <li class="active has-sub">
-                        <a class="js-arrow" href="{{ route('black-list.index') }}">
-                            <i class="fas fa-table"></i>Чорний список</a>
-                    </li>
+                <li class="active has-sub">
+                    <a class="js-arrow" href="{{ route('black-list.index') }}">
+                        <i class="fas fa-table"></i>Чорний список</a>
+                </li>
+                <li class="active has-sub">
+                    <a class="js-arrow" href="{{ route('rating.index') }}">
+                        <i class="fas fa-table"></i>Рейтинг</a>
+                </li>
             </ul>
         </nav>
     </div>

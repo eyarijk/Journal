@@ -31,7 +31,9 @@ class CoupleController extends Controller
         $this->validate($request, [
             'teacher'        => 'required|numeric',
             'subject'        => 'required|numeric',
-            'group'        => 'required|numeric'
+            'group'          => 'required|numeric',
+            'semester'       => 'required|numeric',
+            'year'           => 'required|numeric',
         ]);
 
         $checkCouple = TeacherGroup::where('user_id',$request->teacher)
@@ -43,9 +45,11 @@ class CoupleController extends Controller
             return redirect()->route('couples.index');
 
         $couple = new TeacherGroup();
-        $couple->group_id   = $request->group;
-        $couple->user_id = $request->teacher;
+        $couple->group_id      = $request->group;
+        $couple->user_id       = $request->teacher;
         $couple->subject_id    = $request->subject;
+        $couple->semester      = $request->semester;
+        $couple->year          = $request->year;
         $couple->save();
 
         return redirect()->route('couples.index');

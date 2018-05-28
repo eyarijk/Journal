@@ -237,6 +237,8 @@ Vue.component('list-group', __webpack_require__(10));
 
 Vue.component('black-list', __webpack_require__(13));
 
+Vue.component('rating-list', __webpack_require__(27));
+
 var app = new Vue({
   el: '#app'
 });
@@ -13365,7 +13367,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.newTh = null;
         },
         saveNumber: function saveNumber(number, student, day) {
-            this.$http.post('/api/journal/save/?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple.id, { number: number, day: day, student: student }).then(function (response) {}, function (error) {
+            this.$http.post('/api/journal/save?year=' + this.year + '&month=' + this.month + '&couple=' + this.couple.id, { number: number, day: day, student: student }).then(function (response) {}, function (error) {
                 console.log(error);
             });
         }
@@ -14011,6 +14013,222 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */,
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(28)
+/* template */
+var __vue_template__ = __webpack_require__(29)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/RatingList.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5109a7d2", Component.options)
+  } else {
+    hotAPI.reload("data-v-5109a7d2", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 28 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['teacher', 'ratings', 'subjects', 'year', 'semester'],
+    data: function data() {
+        return {
+            tables: this.ratings
+        };
+    },
+    mounted: function mounted() {},
+
+    methods: {
+        saveNumber: function saveNumber(number, student, subject) {
+            this.$http.post('/api/rating/save?year=' + this.year + '&semester=' + this.month + '&semester=' + this.semester, { number: number, subject: subject, student: student }).then(function (response) {}, function (error) {
+                console.log(error);
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "table-responsive table-responsive-data2" }, [
+      _c("table", { staticClass: "table table-data2" }, [
+        _c("thead", [
+          _c(
+            "tr",
+            [
+              _c("th", [_vm._v("П.І.")]),
+              _vm._v(" "),
+              _vm._l(_vm.subjects, function(item) {
+                return _c("th", [_vm._v(_vm._s(item.subject.name))])
+              })
+            ],
+            2
+          )
+        ]),
+        _vm._v(" "),
+        _c(
+          "tbody",
+          [
+            _vm._l(_vm.tables, function(item) {
+              return _c(
+                "tr",
+                { staticClass: "tr-shadow" },
+                [
+                  _c("td", [
+                    _vm._v(
+                      _vm._s(item.student.last_name) +
+                        " " +
+                        _vm._s(item.student.first_name)
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _vm._l(item.subjects, function(rating) {
+                    return _c("td", [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: rating.rating,
+                            expression: "rating.rating"
+                          }
+                        ],
+                        staticStyle: {
+                          "text-align": "center",
+                          border: "1px solid #ccc",
+                          width: "30px"
+                        },
+                        attrs: { type: "text" },
+                        domProps: { value: rating.rating },
+                        on: {
+                          keyup: function($event) {
+                            if (
+                              !("button" in $event) &&
+                              _vm._k(
+                                $event.keyCode,
+                                "enter",
+                                13,
+                                $event.key,
+                                "Enter"
+                              )
+                            ) {
+                              return null
+                            }
+                            _vm.saveNumber(
+                              rating.rating,
+                              item.student.id,
+                              rating.subject.id
+                            )
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(rating, "rating", $event.target.value)
+                          }
+                        }
+                      })
+                    ])
+                  })
+                ],
+                2
+              )
+            }),
+            _vm._v(" "),
+            _c("tr", { staticClass: "spacer" })
+          ],
+          2
+        )
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-5109a7d2", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

@@ -12,4 +12,9 @@ class Subject extends Model
     {
         return $this->hasMany('App\Journal');
     }
+
+    public function rating()
+    {
+        return $this->hasMany('App\Rating');
+    }
 }

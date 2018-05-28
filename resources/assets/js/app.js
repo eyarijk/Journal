@@ -21,6 +21,8 @@ Vue.component('list-group', require('./components/ListGroup.vue'));
 
 Vue.component('black-list', require('./components/BlackList.vue'));
 
+Vue.component('rating-list', require('./components/RatingList.vue'));
+
 const app = new Vue({
     el: '#app'
 });

@@ -24,3 +24,5 @@ Route::post('/black-list','BlackListController@show');
 Route::post('/journal/save','Api\JournalController@save');
 
 Route::post('/journal/store/day','Api\JournalController@storeDay');
+
+Route::post('/rating/save','Teacher\RatingsController@save');

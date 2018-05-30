@@ -204,7 +204,7 @@ module.exports = function normalizeComponent (
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(3);
-module.exports = __webpack_require__(16);
+module.exports = __webpack_require__(19);
 
 
 /***/ }),
@@ -237,7 +237,7 @@ Vue.component('list-group', __webpack_require__(10));
 
 Vue.component('black-list', __webpack_require__(13));
 
-Vue.component('rating-list', __webpack_require__(27));
+Vue.component('rating-list', __webpack_require__(16));
 
 var app = new Vue({
   el: '#app'
@@ -14010,30 +14010,14 @@ if (false) {
 
 /***/ }),
 /* 16 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 17 */,
-/* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */,
-/* 23 */,
-/* 24 */,
-/* 25 */,
-/* 26 */,
-/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(28)
+var __vue_script__ = __webpack_require__(17)
 /* template */
-var __vue_template__ = __webpack_require__(29)
+var __vue_template__ = __webpack_require__(18)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -14072,11 +14056,56 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 28 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -14104,7 +14133,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     props: ['teacher', 'ratings', 'subjects', 'year', 'semester'],
     data: function data() {
         return {
-            tables: this.ratings
+            tables: this.ratings,
+            step: 'rating'
         };
     },
     mounted: function mounted() {},
@@ -14114,12 +14144,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.$http.post('/api/rating/save?year=' + this.year + '&semester=' + this.month + '&semester=' + this.semester, { number: number, subject: subject, student: student }).then(function (response) {}, function (error) {
                 console.log(error);
             });
+        },
+        saveExtra: function saveExtra(extra, student) {
+            alert(extra);
+        },
+        setStep: function setStep(step) {
+            this.step = step;
+        },
+        getClass: function getClass(step) {
+            if (this.step == step) return 'active';
+            return '';
+        },
+        getAll: function getAll(item, key) {
+            var subjects = 0;
+            for (var i = 0; i < item.subjects.length; i++) {
+                subjects += Number(item.subjects[i].rating);
+            }
+            subjects /= item.subjects.length;
+            subjects *= 0.9;
+
+            var total = Number(subjects) + Number(item.extra);
+            item.all = total;
+
+            return total;
         }
     }
 });
 
 /***/ }),
-/* 29 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -14127,30 +14180,184 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "table-responsive table-responsive-data2" }, [
-      _c("table", { staticClass: "table table-data2" }, [
-        _c("thead", [
+    _c("ul", { staticClass: "nav nav-tabs" }, [
+      _c("li", { staticClass: "nav-item" }, [
+        _c(
+          "span",
+          {
+            staticClass: "nav-link tab-span",
+            class: _vm.getClass("rating"),
+            on: {
+              click: function($event) {
+                _vm.setStep("rating")
+              }
+            }
+          },
+          [_vm._v("Рейтинг")]
+        )
+      ]),
+      _vm._v(" "),
+      _c("li", { staticClass: "nav-item" }, [
+        _c(
+          "span",
+          {
+            staticClass: "nav-link tab-span",
+            class: _vm.getClass("extra"),
+            on: {
+              click: function($event) {
+                _vm.setStep("extra")
+              }
+            }
+          },
+          [_vm._v("Додаткові бали")]
+        )
+      ]),
+      _vm._v(" "),
+      _c("li", { staticClass: "nav-item" }, [
+        _c(
+          "span",
+          {
+            staticClass: "nav-link tab-span",
+            class: _vm.getClass("all"),
+            on: {
+              click: function($event) {
+                _vm.setStep("all")
+              }
+            }
+          },
+          [_vm._v("Загальний рейтинг")]
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.step == "rating",
+            expression: "step == 'rating'"
+          }
+        ],
+        staticClass: "table-responsive table-responsive-data2"
+      },
+      [
+        _c("table", { staticClass: "table table-data2" }, [
+          _c("thead", [
+            _c(
+              "tr",
+              [
+                _c("th", [_vm._v("П.І.")]),
+                _vm._v(" "),
+                _vm._l(_vm.subjects, function(item) {
+                  return _c("th", [_vm._v(_vm._s(item.subject.name))])
+                })
+              ],
+              2
+            )
+          ]),
+          _vm._v(" "),
           _c(
-            "tr",
+            "tbody",
             [
-              _c("th", [_vm._v("П.І.")]),
+              _vm._l(_vm.tables, function(item) {
+                return _c(
+                  "tr",
+                  { staticClass: "tr-shadow" },
+                  [
+                    _c("td", [
+                      _vm._v(
+                        _vm._s(item.student.last_name) +
+                          " " +
+                          _vm._s(item.student.first_name)
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _vm._l(item.subjects, function(rating) {
+                      return _c("td", [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: rating.rating,
+                              expression: "rating.rating"
+                            }
+                          ],
+                          staticStyle: {
+                            "text-align": "center",
+                            border: "1px solid #ccc",
+                            width: "30px"
+                          },
+                          attrs: { type: "text" },
+                          domProps: { value: rating.rating },
+                          on: {
+                            keyup: function($event) {
+                              if (
+                                !("button" in $event) &&
+                                _vm._k(
+                                  $event.keyCode,
+                                  "enter",
+                                  13,
+                                  $event.key,
+                                  "Enter"
+                                )
+                              ) {
+                                return null
+                              }
+                              _vm.saveNumber(
+                                rating.rating,
+                                item.student.id,
+                                rating.subject.id
+                              )
+                            },
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(rating, "rating", $event.target.value)
+                            }
+                          }
+                        })
+                      ])
+                    })
+                  ],
+                  2
+                )
+              }),
               _vm._v(" "),
-              _vm._l(_vm.subjects, function(item) {
-                return _c("th", [_vm._v(_vm._s(item.subject.name))])
-              })
+              _c("tr", { staticClass: "spacer" })
             ],
             2
           )
-        ]),
-        _vm._v(" "),
-        _c(
-          "tbody",
-          [
-            _vm._l(_vm.tables, function(item) {
-              return _c(
-                "tr",
-                { staticClass: "tr-shadow" },
-                [
+        ])
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.step == "extra",
+            expression: "step == 'extra'"
+          }
+        ],
+        staticClass: "table-responsive table-responsive-data2"
+      },
+      [
+        _c("table", { staticClass: "table table-data2" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "tbody",
+            [
+              _vm._l(_vm.tables, function(item) {
+                return _c("tr", { staticClass: "tr-shadow" }, [
                   _c("td", [
                     _vm._v(
                       _vm._s(item.student.last_name) +
@@ -14159,68 +14366,130 @@ var render = function() {
                     )
                   ]),
                   _vm._v(" "),
-                  _vm._l(item.subjects, function(rating) {
-                    return _c("td", [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: rating.rating,
-                            expression: "rating.rating"
-                          }
-                        ],
-                        staticStyle: {
-                          "text-align": "center",
-                          border: "1px solid #ccc",
-                          width: "30px"
-                        },
-                        attrs: { type: "text" },
-                        domProps: { value: rating.rating },
-                        on: {
-                          keyup: function($event) {
-                            if (
-                              !("button" in $event) &&
-                              _vm._k(
-                                $event.keyCode,
-                                "enter",
-                                13,
-                                $event.key,
-                                "Enter"
-                              )
-                            ) {
-                              return null
-                            }
-                            _vm.saveNumber(
-                              rating.rating,
-                              item.student.id,
-                              rating.subject.id
-                            )
-                          },
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(rating, "rating", $event.target.value)
-                          }
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: item.extra,
+                          expression: "item.extra"
                         }
-                      })
-                    ])
+                      ],
+                      staticStyle: {
+                        "text-align": "center",
+                        border: "1px solid #ccc",
+                        width: "30px"
+                      },
+                      attrs: { type: "text" },
+                      domProps: { value: item.extra },
+                      on: {
+                        keyup: function($event) {
+                          if (
+                            !("button" in $event) &&
+                            _vm._k(
+                              $event.keyCode,
+                              "enter",
+                              13,
+                              $event.key,
+                              "Enter"
+                            )
+                          ) {
+                            return null
+                          }
+                          _vm.saveExtra(item.extra, item.student.id)
+                        },
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(item, "extra", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ])
+              }),
+              _vm._v(" "),
+              _c("tr", { staticClass: "spacer" })
+            ],
+            2
+          )
+        ])
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.step == "all",
+            expression: "step == 'all'"
+          }
+        ],
+        staticClass: "table-responsive table-responsive-data2"
+      },
+      [
+        _c("table", { staticClass: "table table-data2" }, [
+          _vm._m(1),
+          _vm._v(" "),
+          _c(
+            "tbody",
+            [
+              _vm._l(_vm.tables, function(item) {
+                return _c("tr", { staticClass: "tr-shadow" }, [
+                  _c("td", [
+                    _vm._v(
+                      _vm._s(item.student.last_name) +
+                        " " +
+                        _vm._s(item.student.first_name)
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("td", {
+                    domProps: { textContent: _vm._s(_vm.getAll(item)) }
                   })
-                ],
-                2
-              )
-            }),
-            _vm._v(" "),
-            _c("tr", { staticClass: "spacer" })
-          ],
-          2
-        )
-      ])
-    ])
+                ])
+              }),
+              _vm._v(" "),
+              _c("tr", { staticClass: "spacer" })
+            ],
+            2
+          )
+        ])
+      ]
+    )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("П.І.")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Додатковий бал")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("П.І.")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Загальний рейтинг")])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -14229,6 +14498,12 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-5109a7d2", module.exports)
   }
 }
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

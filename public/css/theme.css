@@ -14605,3 +14605,7 @@ section {
 .vue-lists ul, .vue-lists ol {
     padding-left: 30px;
 }
+.tab-span {
+    cursor: pointer;
+    color:#3f5efb;
+}

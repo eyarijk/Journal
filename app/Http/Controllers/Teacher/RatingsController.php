@@ -90,10 +90,12 @@ class RatingsController extends Controller
 
         foreach ($ratings as $rating) {
             $student[$rating->student_id]['student'] = $rating->student;
-            $student[$rating->student_id]['subjects'][$rating->subject_id] = [
+            $student[$rating->student_id]['subjects'][] = [
                 'rating' => $rating->rating,
                 'subject' => $rating->subject,
             ];
+            $student[$rating->student_id]['extra'] = 10;
+            $student[$rating->student_id]['all'] = 0;
         }
 
        return $student;

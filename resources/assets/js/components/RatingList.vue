@@ -56,7 +56,7 @@
                 <tbody>
                 <tr class="tr-shadow" v-for="item in tables">
                     <td>{{ item.student.last_name }} {{ item.student.first_name }}</td>
-                    <td v-text=" getAll(item)"></td>
+                    <td v-text="getAll(item,item.student.id)"></td>
                 </tr>
                 <tr class="spacer"></tr>
                 </tbody>
@@ -72,6 +72,7 @@
             return {
                 tables: this.ratings,
                 step: 'rating',
+                error: null,
             }
         },
         mounted() {
@@ -79,14 +80,27 @@
         },
         methods: {
             saveNumber: function (number,student,subject) {
-                this.$http.post('/api/rating/save?year=' + this.year + '&semester=' + this.month + '&semester=' + this.semester,{ number:number,subject:subject,student:student }).then(function(response) {
-
+                if (number < 0 || number > 100){
+                    alert('Рейтинговий бал не може бути більший ніж 100 і меньший ніж 0 !');
+                    return false;
+                }
+                this.$http.post('/api/rating/save?year=' + this.year + '&semester=' + this.month + '&semester=' + this.semester,{ number:number,teacher:this.teacher,subject:subject,student:student }).then(function(response) {
+                    if (response.body != 'Success')
+                        alert(response.body);
                 }, function (error) {
                     console.log(error);
                 });
             },
             saveExtra: function (extra,student) {
-                alert(extra);
+                if (extra < 0 || extra > 10){
+                    alert('Додатковий бал не може бути більший ніж 10 і меньший ніж 0 !');
+                    return false;
+                }
+                this.$http.post('/api/rating/save/extra?year=' + this.year +  '&semester=' + this.semester,{ student:student,teacher:this.teacher,number:extra }).then(function(response) {
+
+                }, function (error) {
+
+                });
             },
             setStep: function (step) {
                 this.step = step
@@ -96,7 +110,7 @@
                     return 'active';
                 return '';
             },
-            getAll: function (item,key) {
+            getAll: function (item,student) {
                 var subjects = 0;
                 for (var i = 0; i < item.subjects.length;i++){
                     subjects += Number(item.subjects[i].rating);

@@ -50,7 +50,7 @@ class JournalsController extends Controller
 
         $month = Journal::where('teacher_group_id',$couple->id)->pluck('month')->toArray();
 
-        $freeMonth = array_diff(range(1,12),$month);
+        $freeMonth = array_diff(array_merge(range(1,6),range(9,12)),$month);
 
         return view('teacher.journal.create',compact('func','month','freeMonth','couple'));
     }

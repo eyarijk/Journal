@@ -10,6 +10,26 @@
                         <i class="zmdi zmdi-plus"></i>Додати студента</a>
                 </div>
             </div>
+            <form action="{{ route('students.index') }}" id="form-sort" method="get">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="faculty">Факультет</label>
+                        <select name="faculty" onchange="document.getElementById('form-sort').submit();" id="faculty" class="custom-select">
+                            @foreach($faculties as $faculty)
+                                <option @if($selectFaculty == $faculty->id) selected @endif value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="group">Група</label>
+                        <select name="group" onchange="document.getElementById('form-sort').submit();" id="group"  class="custom-select">
+                            @foreach($groups as $group)
+                                <option @if($selectGroup == $group->id) selected @endif value="{{ $group->id }}">{{ $group->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </form>
             <div class="table-responsive table-responsive-data2">
                 @if (sizeof($students) > 0)
                     <table class="table table-data2">

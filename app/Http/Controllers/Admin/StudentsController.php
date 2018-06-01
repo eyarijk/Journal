@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Faculty;
 use App\Group;
 use App\Http\Controllers\Controller;
 use App\Student;
@@ -9,10 +10,19 @@ use Illuminate\Http\Request;
 
 class StudentsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $students = Student::all();
-        return view('admin.student.index',compact('students'));
+        $faculties = Faculty::all();
+
+        $selectFaculty = $request->faculty ? $request->faculty : array_first($faculties)->id;
+
+        $groups = Group::where('faculty_id',$selectFaculty)->get();
+
+        $selectGroup  = $request->group ? $request->group : array_first($groups)->id;
+
+        $students = Student::where('group_id',$selectGroup)->get();
+
+        return view('admin.student.index',compact('students','groups','selectFaculty','faculties','selectGroup'));
     }
 
     public function create()

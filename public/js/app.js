@@ -14134,19 +14134,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
         return {
             tables: this.ratings,
-            step: 'rating'
+            step: 'rating',
+            error: null
         };
     },
     mounted: function mounted() {},
 
     methods: {
         saveNumber: function saveNumber(number, student, subject) {
-            this.$http.post('/api/rating/save?year=' + this.year + '&semester=' + this.month + '&semester=' + this.semester, { number: number, subject: subject, student: student }).then(function (response) {}, function (error) {
+            if (number < 0 || number > 100) {
+                alert('Рейтинговий бал не може бути більший ніж 100 і меньший ніж 0 !');
+                return false;
+            }
+            this.$http.post('/api/rating/save?year=' + this.year + '&semester=' + this.month + '&semester=' + this.semester, { number: number, teacher: this.teacher, subject: subject, student: student }).then(function (response) {
+                if (response.body != 'Success') alert(response.body);
+            }, function (error) {
                 console.log(error);
             });
         },
         saveExtra: function saveExtra(extra, student) {
-            alert(extra);
+            if (extra < 0 || extra > 10) {
+                alert('Додатковий бал не може бути більший ніж 10 і меньший ніж 0 !');
+                return false;
+            }
+            this.$http.post('/api/rating/save/extra?year=' + this.year + '&semester=' + this.semester, { student: student, teacher: this.teacher, number: extra }).then(function (response) {}, function (error) {});
         },
         setStep: function setStep(step) {
             this.step = step;
@@ -14155,7 +14166,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (this.step == step) return 'active';
             return '';
         },
-        getAll: function getAll(item, key) {
+        getAll: function getAll(item, student) {
             var subjects = 0;
             for (var i = 0; i < item.subjects.length; i++) {
                 subjects += Number(item.subjects[i].rating);
@@ -14450,7 +14461,9 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("td", {
-                    domProps: { textContent: _vm._s(_vm.getAll(item)) }
+                    domProps: {
+                      textContent: _vm._s(_vm.getAll(item, item.student.id))
+                    }
                   })
                 ])
               }),

@@ -26,3 +26,7 @@ Route::post('/journal/save','Api\JournalController@save');
 Route::post('/journal/store/day','Api\JournalController@storeDay');
 
 Route::post('/rating/save','Teacher\RatingsController@save');
+
+Route::post('/rating/save/extra','Teacher\RatingsController@extra');
+
+Route::post('/rating/save/all','Teacher\RatingsController@all');

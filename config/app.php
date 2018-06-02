@@ -177,7 +177,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         // My Providers
-
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
     ],
 
@@ -229,7 +229,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         // My Alias
-
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
     ],
 

@@ -13648,6 +13648,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['groups', 'years'],
@@ -13730,6 +13731,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     return this.groups[i].name;
                 }
             }
+        },
+        getExport: function getExport() {
+            window.location = '/api/black-list/export?group=' + this.group + '&year=' + this.year + '&months=' + this.selectMonth;
         }
     }
 });
@@ -13955,6 +13959,15 @@ var render = function() {
           _c("h3", [_vm._v("Група: " + _vm._s(_vm.getGroup(this.group)))]),
           _vm._v(" "),
           _c(
+            "button",
+            {
+              staticClass: "btn btn-dark m-b-10 m-t-10",
+              on: { click: _vm.getExport }
+            },
+            [_vm._v("Експорт")]
+          ),
+          _vm._v(" "),
+          _c(
             "div",
             { staticClass: "table-responsive table-responsive-data2" },
             [
@@ -14128,9 +14141,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['teacher', 'ratings', 'subjects', 'year', 'semester'],
+    props: ['teacher', 'ratings', 'subjects', 'year', 'semester', 'group'],
     data: function data() {
         return {
             tables: this.ratings,
@@ -14166,6 +14180,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (this.step == step) return 'active';
             return '';
         },
+        getExport: function getExport() {
+            window.location = '/api/rating/export?year=' + this.year + '&semester=' + this.semester + '&group=' + this.group;
+        },
         getAll: function getAll(item, student) {
             var subjects = 0;
             for (var i = 0; i < item.subjects.length; i++) {
@@ -14191,6 +14208,12 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c(
+      "button",
+      { staticClass: "btn btn-dark m-b-10", on: { click: _vm.getExport } },
+      [_vm._v("Експорт")]
+    ),
+    _vm._v(" "),
     _c("ul", { staticClass: "nav nav-tabs" }, [
       _c("li", { staticClass: "nav-item" }, [
         _c(

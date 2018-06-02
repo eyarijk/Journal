@@ -1,5 +1,6 @@
 <template>
     <div>
+        <button @click="getExport" class="btn btn-dark m-b-10">Експорт</button>
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <span class="nav-link tab-span" :class="getClass('rating')" @click="setStep('rating')">Рейтинг</span>
@@ -67,7 +68,7 @@
 
 <script>
     export default {
-        props:['teacher','ratings','subjects','year','semester'],
+        props:['teacher','ratings','subjects','year','semester','group'],
         data: function () {
             return {
                 tables: this.ratings,
@@ -109,6 +110,9 @@
                 if (this.step == step)
                     return 'active';
                 return '';
+            },
+            getExport: function () {
+              window.location = '/api/rating/export?year=' + this.year +  '&semester=' + this.semester + '&group=' + this.group;
             },
             getAll: function (item,student) {
                 var subjects = 0;

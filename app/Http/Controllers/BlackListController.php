@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Excel;
 use App\Group;
 use App\Journal;
 use App\Student;
@@ -42,6 +43,41 @@ class BlackListController extends Controller
 
 
         return json_encode(['ban' => $ban]);
+    }
+
+    public function export(Request $request)
+    {
+        $export = [];
+        $export[0][] = 'П.І.';
+
+        $group = Group::findOrFail($request->group);
+
+        $year  = $request->year;
+        $months = explode(',',$request->months);
+
+        $students = Student::where('group_id',$group->id)->get(['id','first_name','last_name']);
+
+        $index = 1;
+        foreach ($students as $student){
+            $journal = Journal::where('year',$year)->whereIn('month',$months)->where('student_id',$student->id)->get();
+            if ($this->searchForBlackList($journal)){
+                $export[$index][] = $student->getFullName();
+                $index++;
+            }
+
+        }
+
+        $nameTable = 'Чорний список за '.$year.'. Група: '. $group->name. '. (Місяці: '.$request->months. ')';
+
+        Excel::create($nameTable, function($excel) use ($export) {
+
+            $excel->sheet('Рейтинг', function($sheet) use ($export){
+
+                $sheet->fromArray($export);
+
+            });
+
+        })->export('xls');
     }
 
     private function searchForBlackList($journal)

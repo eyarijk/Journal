@@ -40,6 +40,7 @@
         <div class="row" v-show="this.ban.length > 0">
             <div class="col-md-12">
                 <h3>Група: {{ getGroup(this.group) }}</h3>
+                <button @click="getExport" class="btn btn-dark m-b-10 m-t-10">Експорт</button>
                 <div class="table-responsive table-responsive-data2">
                     <table class="table table-data2">
                         <thead>
@@ -155,6 +156,9 @@
                       return this.groups[i].name;
                   }
               }
+            },
+            getExport: function () {
+               window.location = '/api/black-list/export?group=' + this.group + '&year=' + this.year + '&months=' + this.selectMonth;
             },
         }
     }

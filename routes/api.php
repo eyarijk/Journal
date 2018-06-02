@@ -19,6 +19,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/journal','Api\JournalController@index');
 
+Route::get('/rating/export','Teacher\RatingsController@export');
+
+Route::get('/black-list/export','BlackListController@export');
+
 Route::post('/black-list','BlackListController@show');
 
 Route::post('/journal/save','Api\JournalController@save');

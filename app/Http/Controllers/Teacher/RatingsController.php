@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Teacher;
 
+use App\Student;
+use Excel;
 use App\Group;
 use App\Http\Controllers\Controller;
 use App\Rating;
@@ -110,6 +112,36 @@ class RatingsController extends Controller
         return 'Success';
     }
 
+    public function export(Request $request)
+    {
+        $group = Group::findOrFail($request->group);
+        $year = $request->year;
+        $semester = $request->semester;
+
+        $students = Student::where('group_id',$group->id)->pluck('id');
+
+        $ratings = Rating::whereIn('student_id',$students)
+            ->where('year',$year)
+            ->where('semester',$semester)
+            ->with('student')->with('subject')->get();
+
+        $ratings = $this->formatRating($ratings);
+
+        $export = $this->formatExportRating($ratings);
+
+        $nameTable = 'Рейтинг за '.$year.' '.$semester.' семестр. Група: '. $group->name;
+
+        Excel::create($nameTable, function($excel) use ($export) {
+
+            $excel->sheet('Рейтинг', function($sheet) use ($export){
+
+                $sheet->fromArray($export);
+
+            });
+
+        })->export('xls');
+    }
+
     // Other methods
     private function createRatingDb($couples,$students,$year,$semester)
     {
@@ -177,5 +209,50 @@ class RatingsController extends Controller
             return 2;
 
         return 1;
+    }
+
+    private function formatExportRating($ratings)
+    {
+        $export = [];
+        $index = 1;
+
+        $subjectsRow = array_first($ratings);
+
+        $export[0][] = 'П.І';
+
+        foreach ($subjectsRow['subjects'] as $item){
+            $export[0][] = $item['subject']->name;
+        }
+
+        $export[0][] = 'Додатковий рейтинг';
+        $export[0][] = 'Загальний рейтинг';
+
+        foreach ($ratings as $rating){
+            $export[$index][] = array_get($rating,'student')->getFullName();
+
+            foreach ($rating['subjects'] as $subject)
+                $export[$index][] = array_get($subject,'rating') != null ? array_get($subject,'rating') : 0;
+
+            $all = $this->getAllRating($export[$index],$rating['extra']);
+
+            $export[$index][] = $rating['extra'] != null ? $rating['extra'] : 0;
+            $export[$index][] = $all;
+            $index++;
+        }
+
+        return $export;
+    }
+
+    private function getAllRating($item,$extra)
+    {
+        unset($item[0]);
+        $total = 0;
+
+        foreach ($item as $value)
+            $total += $value;
+
+        $total = $total / sizeof($item) * 0.9;
+
+        return ($total + $extra);
     }
 }

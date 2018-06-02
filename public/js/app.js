@@ -14328,19 +14328,7 @@ var render = function() {
                           attrs: { type: "text" },
                           domProps: { value: rating.rating },
                           on: {
-                            keyup: function($event) {
-                              if (
-                                !("button" in $event) &&
-                                _vm._k(
-                                  $event.keyCode,
-                                  "enter",
-                                  13,
-                                  $event.key,
-                                  "Enter"
-                                )
-                              ) {
-                                return null
-                              }
+                            change: function($event) {
                               _vm.saveNumber(
                                 rating.rating,
                                 item.student.id,
@@ -14418,19 +14406,7 @@ var render = function() {
                       attrs: { type: "text" },
                       domProps: { value: item.extra },
                       on: {
-                        keyup: function($event) {
-                          if (
-                            !("button" in $event) &&
-                            _vm._k(
-                              $event.keyCode,
-                              "enter",
-                              13,
-                              $event.key,
-                              "Enter"
-                            )
-                          ) {
-                            return null
-                          }
+                        change: function($event) {
                           _vm.saveExtra(item.extra, item.student.id)
                         },
                         input: function($event) {

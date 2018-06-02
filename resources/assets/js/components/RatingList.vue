@@ -23,7 +23,7 @@
                 <tbody>
                     <tr class="tr-shadow" v-for="item in tables">
                         <td>{{ item.student.last_name }} {{ item.student.first_name }}</td>
-                        <td v-for="rating in item.subjects"><input @keyup.enter="saveNumber(rating.rating,item.student.id,rating.subject.id)" v-model="rating.rating" style="text-align: center;border: 1px solid #ccc;width: 30px;" type="text"></td>
+                        <td v-for="rating in item.subjects"><input @change="saveNumber(rating.rating,item.student.id,rating.subject.id)" v-model="rating.rating" style="text-align: center;border: 1px solid #ccc;width: 30px;" type="text"></td>
                     </tr>
                     <tr class="spacer"></tr>
                 </tbody>
@@ -40,7 +40,7 @@
                 <tbody>
                 <tr class="tr-shadow" v-for="item in tables">
                     <td>{{ item.student.last_name }} {{ item.student.first_name }}</td>
-                    <td><input @keyup.enter="saveExtra(item.extra,item.student.id)" v-model="item.extra" style="text-align: center;border: 1px solid #ccc;width: 30px;" type="text"></td>
+                    <td><input @change="saveExtra(item.extra,item.student.id)" v-model="item.extra" style="text-align: center;border: 1px solid #ccc;width: 30px;" type="text"></td>
                 </tr>
                 <tr class="spacer"></tr>
                 </tbody>

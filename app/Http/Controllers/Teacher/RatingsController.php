@@ -23,9 +23,12 @@ class RatingsController extends Controller
 
         $years = array_unique( $years ? $years : [date('Y')]);
 
-        $couples = TeacherGroup::where('user_id',$teacher)->where('year',$selectYear)->where('semester',$semester)->with('group')->get();
+        $groups = Group::whereHas('couple',function ($q) use ($teacher,$selectYear,$semester){
+            $q->where('user_id',$teacher)->where('year',$selectYear)->where('semester',$semester);
+        })->get();
 
-        return view('teacher.rating.index',compact('couples','semester','years','selectYear','semester'));
+
+        return view('teacher.rating.index',compact('groups','semester','years','selectYear','semester'));
     }
 
     public function show(Group $group,Request $request)

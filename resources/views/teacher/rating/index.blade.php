@@ -24,7 +24,7 @@
                 </div>
             </form>
             <div class="table-responsive table-responsive-data2">
-                @if (sizeof($couples) > 0)
+                @if (sizeof($groups) > 0)
                     <table class="table table-data2">
                         <thead>
                         <tr>
@@ -33,12 +33,12 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($couples as $couple)
+                        @foreach($groups as $group)
                             <tr class="tr-shadow">
-                                <td>{{ $couple->group->name }}</td>
+                                <td>{{ $group->name }}</td>
                                 <td>
                                     <div class="table-data-feature">
-                                        <a href="{{ route('rating.show',$couple->group->id) }}" class="item" data-toggle="tooltip" data-placement="top" title="Рейтинг" data-original-title="Рейтинг">
+                                        <a href="{{ route('rating.show',$group->id) }}" class="item" data-toggle="tooltip" data-placement="top" title="Рейтинг" data-original-title="Рейтинг">
                                             <i class="zmdi zmdi-edit"></i>
                                         </a>
                                     </div>

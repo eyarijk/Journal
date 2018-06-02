@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Excel;
 use App\Group;
 use App\Journal;
@@ -15,7 +16,8 @@ class BlackListController extends Controller
         $teacher = auth()->id();
 
         $groups = Group::whereHas('couple',function ($q) use ($teacher){
-            $q->where('user_id',$teacher);
+            if (auth()->user()->role == User::TEACHER)
+                $q->where('user_id',$teacher);
         })->get()->toArray();
 
         $years = Journal::whereHas('teacherGroup',function ($q) use ($groups){

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Teacher;
 use App\Journal;
 use App\TeacherGroup;
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Http\Request;
 
 
@@ -22,7 +23,12 @@ class DashboardController extends Controller
 
         $years = array_unique( $years ? $years : [date('Y')]);
 
-        $couples = TeacherGroup::where('user_id',$teacher)->where('year',$selectYear)->where('semester',$semester)->with('group')->get();
+        $couples = TeacherGroup::where('year',$selectYear)->where('semester',$semester)->with('group');
+
+        if (auth()->user()->role == User::TEACHER)
+            $couples->where('user_id',$teacher);
+
+        $couples = $couples->get();
 
         return view('teacher.index',compact('couples','years','selectYear','semester'));
     }

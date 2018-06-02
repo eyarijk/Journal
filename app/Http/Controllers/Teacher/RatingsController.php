@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Student;
+use App\User;
 use Excel;
 use App\Group;
 use App\Http\Controllers\Controller;
@@ -24,7 +25,9 @@ class RatingsController extends Controller
         $years = array_unique( $years ? $years : [date('Y')]);
 
         $groups = Group::whereHas('couple',function ($q) use ($teacher,$selectYear,$semester){
-            $q->where('user_id',$teacher)->where('year',$selectYear)->where('semester',$semester);
+            $q->where('year',$selectYear)->where('semester',$semester);
+            if (auth()->user()->role == User::TEACHER)
+                $q->where('user_id',$teacher);
         })->get();
 
 
@@ -50,12 +53,16 @@ class RatingsController extends Controller
 
         $ratings = Rating::whereIn('id',$ratings)->with('student')->with('subject')->get();
 
-
         $ratings = $this->formatRating($ratings);
 
         $subjects = array_get(array_first($ratings),'subjects');
 
-        return view('teacher.rating.show',compact('teacher','ratings','subjects','year','semester','group'));
+        $admin = false;
+
+        if (auth()->user()->role == User::ADMINISTRATOR)
+            $admin = true;
+
+        return view('teacher.rating.show',compact('teacher','ratings','subjects','year','semester','group','admin'));
 
     }
 
@@ -74,7 +81,7 @@ class RatingsController extends Controller
             ->where('subject_id',$subject)
         ->first();
 
-        if($rating->teacherGroup->user_id != $teacher)
+        if($rating->teacherGroup->user_id != $teacher && $request->admin == false)
             return 'Ви не можете поставити оцінки не на свої предмети!';
 
         $rating->rating = $number;

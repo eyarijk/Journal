@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Journal;
 use App\TeacherGroup;
 use App\Traits\JournalTrait;
+use App\User;
 use Illuminate\Http\Request;
 
 class JournalsController extends Controller
@@ -16,7 +17,7 @@ class JournalsController extends Controller
     {
         $teacher = auth()->id();
 
-        if ($couple->user_id != $teacher)
+        if ($couple->user_id != $teacher && auth()->user() == User::TEACHER)
             abort(404);
 
         $journal = Journal::where('teacher_group_id',$couple->id)->orderBy('month','asc')->orderBy('year','asc')->get();

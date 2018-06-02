@@ -68,7 +68,7 @@
 
 <script>
     export default {
-        props:['teacher','ratings','subjects','year','semester','group'],
+        props:['teacher','ratings','subjects','year','semester','group','admin'],
         data: function () {
             return {
                 tables: this.ratings,
@@ -85,7 +85,7 @@
                     alert('Рейтинговий бал не може бути більший ніж 100 і меньший ніж 0 !');
                     return false;
                 }
-                this.$http.post('/api/rating/save?year=' + this.year + '&semester=' + this.month + '&semester=' + this.semester,{ number:number,teacher:this.teacher,subject:subject,student:student }).then(function(response) {
+                this.$http.post('/api/rating/save?year=' + this.year + '&semester=' + this.month + '&semester=' + this.semester,{ number:number,teacher:this.teacher,subject:subject,student:student,admin:this.admin }).then(function(response) {
                     if (response.body != 'Success')
                         alert(response.body);
                 }, function (error) {

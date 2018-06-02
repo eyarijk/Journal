@@ -18,7 +18,13 @@ class StudentsController extends Controller
 
         $groups = Group::where('faculty_id',$selectFaculty)->get();
 
-        $selectGroup  = $request->group ? $request->group : array_first($groups)->id;
+        if ($request->group) {
+            $selectGroup = $request->group;
+        } elseif (sizeof($groups) > 0){
+            $selectGroup = array_first($groups)->id;
+        } else {
+            $selectGroup = null;
+        }
 
         $students = Student::where('group_id',$selectGroup)->get();
 
